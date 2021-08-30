@@ -1,8 +1,12 @@
 {
   "name": "@codexplain/common",
   "version": "0.1.0",
-  "main": "src/index.ts",
   "license": "MIT",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "/build"
+  ],
   "devDependencies": {
     "@types/node": "^16.7.6",
     "@types/react": "^17.0.19",
@@ -11,5 +15,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w"
+  },
+  "dependencies": {
+    "openai-api": "^1.2.5"
   }
 }
