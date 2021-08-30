@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "codexplain",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "web": "yarn workspace @codexplain/web",
+    "extension": "yarn workspace @codexplain/extension",
+    "common": "yarn workspace @codexplain/common"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-typescript": "^7.15.0",
+    "babel-jest": "^27.1.0"
+  }
+}

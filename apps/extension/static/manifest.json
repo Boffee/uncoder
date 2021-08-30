@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "short_name": "Codexplain",
+  "name": "Codexplain Extension",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": { "service_worker": "background.bundle.js" },
+
+  "permissions": ["activeTab", "tabs"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.bundle.js"]
+    }
+  ],
+  "icons": {}
+}
