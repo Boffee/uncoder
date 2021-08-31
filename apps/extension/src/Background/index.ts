@@ -1,15 +1,17 @@
-chrome.contextMenus.removeAll();
+import browser from "webextension-polyfill";
+
+browser.contextMenus.removeAll();
 // "explain" to chrome extension context menu which sends a message to notify
 // the content script to explain the current selection.
-chrome.contextMenus.create({
+browser.contextMenus.create({
   id: "explain",
   title: "explain",
   contexts: ["selection"],
 });
 
-chrome.contextMenus.onClicked.addListener(function (info, tab) {
+browser.contextMenus.onClicked.addListener(function (info, tab) {
   if (info.menuItemId === "explain" && tab?.id) {
-    chrome.tabs.sendMessage(tab.id, {
+    browser.tabs.sendMessage(tab.id, {
       type: "explain",
     });
   }

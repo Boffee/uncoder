@@ -1,4 +1,5 @@
 import { generatePrompt, queryCodexApi } from "@codexplain/common";
+import browser from "webextension-polyfill";
 import "./index.css";
 
 /**
@@ -284,7 +285,7 @@ function findFirstWordEnd(text: string) {
 }
 
 // run explain on "explain" message from background script
-chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+browser.runtime.onMessage.addListener(async (request, sender) => {
   if (request.type === "explain") {
     explain();
   }
