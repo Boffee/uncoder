@@ -27,7 +27,9 @@ function createDivAboveSelection(text: string) {
     window.removeEventListener("click", clickHandler);
     window.removeEventListener("keydown", keydownHandler);
   };
-  const clickHandler = () => {
+  const clickHandler = (event: MouseEvent) => {
+    // only remove the overlay if the click is outside the overlay
+    if (div.contains(event.target as Node)) return;
     document.body.removeChild(div);
     window.removeEventListener("scroll", scrollHandler);
     window.removeEventListener("click", clickHandler);
