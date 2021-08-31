@@ -51,15 +51,11 @@ function createDivAboveSelection(text: string) {
  * Explain the current selection block on github
  */
 async function explain() {
-  const sourceCode = getSourceCode();
+  const sourceCode = getGithubSourceCode();
   if (!sourceCode) return;
-  // get text from extended selection range
-  const range = window.getSelection()?.getRangeAt(0);
-  if (!range) return;
-  const extendedRange = extendRange(range);
-  const block = extendedRange.toString();
-  // query codex
-  const explanation = await queryCodex(sourceCode, block);
+  const selectionBlock = getGithubSelectionText();
+  if (!selectionBlock) return;
+  const explanation = await queryCodex(sourceCode, selectionBlock);
   createDivAboveSelection(explanation);
 }
 
@@ -67,7 +63,7 @@ async function explain() {
  * Extract source code from .js-file-line-container
  * @returns source code
  */
-function getSourceCode() {
+function getGithubSourceCode() {
   // get container
   const container = document.querySelector(".js-file-line-container");
   if (!container) return;
@@ -76,6 +72,21 @@ function getSourceCode() {
     (row) => row.textContent?.replace(/\n+/g, "")
   );
   return lines.join("\n");
+}
+
+/**
+ * Get text in extended selection range
+ */
+function getGithubSelectionText() {
+  const selection = window.getSelection();
+  if (!selection) return;
+  const range = selection.getRangeAt(0);
+  if (!range) return;
+
+  const extendedRange = extendRange(range);
+  const text = getGithubRangeText(extendedRange);
+  console.log(text);
+  return text;
 }
 
 /**
@@ -196,6 +207,50 @@ function trimRange(range: Range) {
     );
   }
   return newRange;
+}
+
+/**
+ * Walk through all text nodes in the range
+ * - add content from text nodes to the array
+ * - add newline on tr node
+ * @param range range to walk through
+ * @returns array of texts
+ **/
+function getGithubRangeText(range: Range) {
+  if (range.startContainer == range.endContainer) {
+    return range.toString();
+  }
+
+  // get start and end text
+  const startText = range.startContainer.textContent?.substring(
+    range.startOffset
+  );
+  const endText = range.endContainer.textContent?.substring(0, range.endOffset);
+
+  const texts = [];
+
+  // get texts between start and end container
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT
+  );
+  walker.currentNode = range.startContainer;
+  while (walker.nextNode() != range.endContainer) {
+    const node = walker.currentNode;
+    if (node.nodeName == "TR") {
+      // add newline on tr node
+      texts.push("\n");
+    } else if (
+      node.nodeType == Node.TEXT_NODE &&
+      node.parentNode?.nodeName != "TR" &&
+      node.parentNode?.nodeName != "TBODY"
+    ) {
+      // add content from text nodes to the array if it is not in a tr or tbody
+      texts.push(node.textContent);
+    }
+  }
+
+  return [startText, ...texts, endText].filter((text) => text).join("");
 }
 
 // run explain on "explain" message from background script
