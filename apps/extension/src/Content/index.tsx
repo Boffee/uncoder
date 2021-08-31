@@ -98,9 +98,34 @@ function getGithubSelectionText() {
  * @returns codex query result
  */
 async function queryCodex(sourceCode: string, block: string) {
+  let input = getSourceCodeWindow(sourceCode, block);
+  const explanation = await queryCodexWithTemplate({
+    input,
+    apiKey: OPENAI_API_KEY,
+    block,
+    instruction: "blockBase",
+  });
+  console.log(explanation);
+  return explanation.trim();
+}
+
+/**
+ * Get the source code window around the selected block
+ * @param sourceCode source code
+ * @param block selected block
+ * @param windowSize number of lines to include in the window
+ * @param suffixSize number of lines to include after the block
+ * @returns source code window
+ */
+function getSourceCodeWindow(
+  sourceCode: string,
+  block: string,
+  windowSize = 200,
+  suffixSize = 40
+) {
   let input = sourceCode;
   const lines = sourceCode.split("\n");
-  if (lines.length > 200) {
+  if (lines.length > windowSize) {
     // start and end of selaection in source code
     const start = sourceCode.indexOf(block);
     const end = start + block.length;
@@ -110,19 +135,12 @@ async function queryCodex(sourceCode: string, block: string) {
     // selection line count
     const windowStartLine = Math.max(
       0,
-      Math.min(endLine - 200 + 40, startLine)
+      Math.min(endLine - windowSize + suffixSize, startLine)
     );
-    const windowEndLine = windowStartLine + 200;
+    const windowEndLine = windowStartLine + windowSize;
     input = lines.slice(windowStartLine, windowEndLine).join("\n");
   }
-  const explanation = await queryCodexWithTemplate({
-    input,
-    apiKey: OPENAI_API_KEY,
-    block,
-    instruction: "blockBase",
-  });
-  console.log(explanation);
-  return explanation.trim();
+  return input;
 }
 
 /**
