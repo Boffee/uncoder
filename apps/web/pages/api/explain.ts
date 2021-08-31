@@ -15,7 +15,10 @@ type Data =
 
 const cors = Cors({
   methods: ["GET", "HEAD"],
-  origin: "*",
+  origin: [
+    "chrome-extension://bgcpepicmcjpbpoajolfochngcogipkl",
+    "http://localhost:3000",
+  ],
 });
 
 // Helper method to wait for a middleware to execute before continuing
@@ -26,6 +29,7 @@ function runMiddleware(
   fn: Function
 ) {
   // print request origin
+  console.log(req.headers.origin);
   return new Promise((resolve, reject) => {
     fn(req, res, (result: any) => {
       if (result instanceof Error) {
