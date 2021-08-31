@@ -1,4 +1,4 @@
-import { generatePrompt, queryCodexApi } from "@codexplain/common";
+import { generatePrompt } from "@codexplain/common";
 import browser from "webextension-polyfill";
 import "./index.css";
 
@@ -104,7 +104,11 @@ async function queryCodex(sourceCode: string, block: string) {
     block,
     instruction: "blockBase",
   });
-  const response = await queryCodexApi({ prompt, isBlock: true });
+  // call queryCodexApi from background script
+  const response = await browser.runtime.sendMessage({
+    type: "queryCodexApi",
+    query: { prompt, isBlock: true },
+  });
   console.log(response);
   return response.output.trim();
 }

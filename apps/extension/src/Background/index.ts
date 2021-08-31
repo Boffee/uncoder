@@ -1,3 +1,4 @@
+import { queryCodexApi } from "@codexplain/common";
 import browser from "webextension-polyfill";
 
 browser.contextMenus.removeAll();
@@ -9,11 +10,19 @@ browser.contextMenus.create({
   contexts: ["selection"],
 });
 
-browser.contextMenus.onClicked.addListener(function (info, tab) {
+browser.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "explain" && tab?.id) {
     browser.tabs.sendMessage(tab.id, {
       type: "explain",
     });
+  }
+});
+
+// call queryCodexApi on queryCodex message
+browser.runtime.onMessage.addListener((message, sender) => {
+  if (message.type === "queryCodexApi") {
+    const response = queryCodexApi(message.query);
+    return response;
   }
 });
 
