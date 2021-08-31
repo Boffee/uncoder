@@ -80,10 +80,10 @@ export function generatePrompt({
   const instructionText = instructions[instruction];
   const template = block ? BLOCK_TEMPLATE : TEMPLATE;
   const prompt = template
-    .replace("{{INPUT}}", input)
-    .replace("{{INSTRUCTION}}", instructionText)
-    .replace("{{LANGUAGE}}", language)
-    .replace("{{BLOCK}}", block);
+    .replace(/{{INPUT}}/g, input)
+    .replace(/{{INSTRUCTION}}/g, instructionText)
+    .replace(/{{LANGUAGE}}/g, language)
+    .replace(/{{BLOCK}}/g, block);
   return prompt;
 }
 
