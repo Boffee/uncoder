@@ -18,9 +18,7 @@ export const BLOCK_TEMPLATE = `
 {{INSTRUCTION}}
 
 \`\`\`{{LANGUAGE}}
-...
 {{BLOCK}}
-...
 \`\`\`
 `;
 
