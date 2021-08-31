@@ -49,11 +49,11 @@ export async function queryCodex({
   const gptResponse = await openai.complete({
     engine: "davinci-codex",
     prompt: prompt,
-    maxTokens: 300,
+    maxTokens: 500,
     temperature: 0,
     topP: 1,
     presencePenalty: 0,
-    frequencyPenalty: 0,
+    frequencyPenalty: 0.2,
     bestOf: 1,
     n: 1,
     stream: false,
