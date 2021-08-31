@@ -148,35 +148,24 @@ function getSelectionStartRect() {
 function extendRange(range: Range) {
   const newRange = range.cloneRange();
   if (newRange.startContainer.nodeType == Node.TEXT_NODE) {
-    // get the char index of the beginning of the first word that contains
-    // the selection
     const startContainerText = newRange.startContainer.textContent;
     if (startContainerText && newRange.startOffset) {
-      const prefixSpaceIndex = startContainerText
-        .substring(0, newRange.startOffset)
-        .lastIndexOf(" ");
-      if (prefixSpaceIndex == -1) {
-        newRange.setStart(newRange.startContainer, 0);
-      } else {
-        newRange.setStart(newRange.startContainer, prefixSpaceIndex + 1);
-      }
+      const prefixSubwordIndex = findLastWordStart(
+        startContainerText.substring(0, newRange.startOffset)
+      );
+      newRange.setStart(newRange.startContainer, prefixSubwordIndex);
     }
   }
   if (newRange.endContainer.nodeType == Node.TEXT_NODE) {
-    // get the char index of the end of the last word that contains the selection
     const endContainerText = newRange.endContainer.textContent;
     if (endContainerText && newRange.endOffset) {
-      const suffixSpaceIndex = endContainerText
-        .substring(newRange.endOffset, endContainerText.length)
-        .indexOf(" ");
-      if (suffixSpaceIndex == -1) {
-        newRange.setEnd(newRange.endContainer, endContainerText.length);
-      } else {
-        newRange.setEnd(
-          newRange.endContainer,
-          newRange.endOffset + suffixSpaceIndex
-        );
-      }
+      const suffixSubwordIndex = findFirstWordEnd(
+        endContainerText.substring(newRange.endOffset, endContainerText.length)
+      );
+      newRange.setEnd(
+        newRange.endContainer,
+        newRange.endOffset + suffixSubwordIndex
+      );
     }
   }
   return newRange;
@@ -251,6 +240,28 @@ function getGithubRangeText(range: Range) {
   }
 
   return [startText, ...texts, endText].filter((text) => text).join("");
+}
+
+/**
+ * Find the position of the first letter of the last word in text
+ * @param text text to search
+ * @returns position of the first letter of the last word
+ */
+function findLastWordStart(text: string) {
+  const lastWord = text.match(/\w+$/)?.[0];
+  if (!lastWord) return 0;
+  return text.length - lastWord.length;
+}
+
+/**
+ * Find the position of the last letter of the first word in text
+ * @param text text to search
+ * @returns position of the last letter of the first word
+ */
+function findFirstWordEnd(text: string) {
+  const firstWord = text.match(/^\w+/)?.[0];
+  if (!firstWord) return text.length;
+  return firstWord.length;
 }
 
 // run explain on "explain" message from background script
