@@ -1,6 +1,8 @@
 import { queryCodexWithTemplate } from "@codexplain/common";
 import "./index.css";
 
+const OPENAI_API_KEY = "FILL_IN_KEY";
+
 /**
  * Overlay a div with the given text directly above current selection
  * The bottom edge should be at the top of the selection
@@ -102,7 +104,7 @@ async function queryCodex(sourceCode: string, block: string) {
   }
   const explanation = await queryCodexWithTemplate({
     input,
-    apiKey: "API_KEY",
+    apiKey: OPENAI_API_KEY,
     block,
     instruction: "blockBase",
   });
