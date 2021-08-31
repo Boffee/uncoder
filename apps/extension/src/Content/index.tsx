@@ -1,7 +1,5 @@
-import { queryCodexWithTemplate } from "@codexplain/common";
+import { generatePrompt, queryCodexApi } from "@codexplain/common";
 import "./index.css";
-
-const OPENAI_API_KEY = "FILL_IN_KEY";
 
 /**
  * Overlay a div with the given text directly above current selection
@@ -77,7 +75,8 @@ function getGithubSourceCode() {
 }
 
 /**
- * Get text in extended selection range
+ * Get github code text in extended selection range
+ * @return text in extended selection range
  */
 function getGithubSelectionText() {
   const selection = window.getSelection();
@@ -99,14 +98,14 @@ function getGithubSelectionText() {
  */
 async function queryCodex(sourceCode: string, block: string) {
   let input = getSourceCodeWindow(sourceCode, block);
-  const explanation = await queryCodexWithTemplate({
+  const prompt = generatePrompt({
     input,
-    apiKey: OPENAI_API_KEY,
     block,
     instruction: "blockBase",
   });
-  console.log(explanation);
-  return explanation.trim();
+  const response = await queryCodexApi({ prompt, isBlock: true });
+  console.log(response);
+  return response.output.trim();
 }
 
 /**
