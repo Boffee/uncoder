@@ -78,7 +78,12 @@ module.exports = {
         loader: "html-loader",
         exclude: /node_modules/,
       },
-      { test: /\.(ts|tsx)$/, loader: "ts-loader", exclude: /node_modules/ },
+      {
+        test: /\.(ts|tsx)$/,
+        loader: "ts-loader",
+        exclude: /node_modules/,
+        options: { projectReferences: true },
+      },
       {
         test: /\.(js|jsx)$/,
         use: [
