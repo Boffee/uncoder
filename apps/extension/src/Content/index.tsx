@@ -42,6 +42,7 @@ function createDivAboveRange(text: string, range: Range) {
 
   window.addEventListener("click", clickHandler);
   window.addEventListener("keydown", keydownHandler);
+  return div;
 }
 
 /**
@@ -54,8 +55,10 @@ async function explain() {
   if (!sourceCode) return;
   const selectionBlock = getGithubRangeText(range);
   if (!selectionBlock) return;
+  const div = createDivAboveRange("Loading...", range);
+  if (!div) return;
   const explanation = await queryCodex(sourceCode, selectionBlock);
-  createDivAboveRange(explanation, range);
+  div.innerText = explanation;
 }
 
 /**
