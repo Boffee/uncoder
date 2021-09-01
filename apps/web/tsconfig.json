@@ -2,7 +2,8 @@
   "extends": "../../tsconfig",
   "compilerOptions": {
     "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "baseUrl": "./src"
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

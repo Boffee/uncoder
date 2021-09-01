@@ -9,11 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^1.6.7",
     "@codexplain/common": "*",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
     "cors": "^2.8.5",
+    "framer-motion": "^4",
     "next": "11.1.0",
+    "next-auth": "^3.29.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "sass": "^1.38.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
