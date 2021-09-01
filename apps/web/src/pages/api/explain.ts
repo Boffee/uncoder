@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { queryCodex } from "@codexplain/common";
+import { queryCodex } from "@uncoder/common";
 import Cors from "cors";
 import type { NextApiRequest, NextApiResponse } from "next";
 

@@ -1,4 +1,4 @@
-import { queryCodexApi } from "@codexplain/common";
+import { queryCodexApi } from "@uncoder/common";
 import browser from "webextension-polyfill";
 
 browser.contextMenus.removeAll();

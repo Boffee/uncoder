@@ -1,4 +1,4 @@
-import { generatePrompt } from "@codexplain/common";
+import { generatePrompt } from "@uncoder/common";
 import browser from "webextension-polyfill";
 import "./index.css";
 
@@ -14,7 +14,7 @@ const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
  */
 function createDivAboveRect(text: string, rect: DOMRect) {
   const div = document.createElement("div");
-  div.className = "codexplain-modal";
+  div.className = "uncoder-modal";
   // set the bottom of the div to the top of the selection
   div.style.bottom = `${
     document.documentElement.clientHeight - window.scrollY - rect.top + 3
