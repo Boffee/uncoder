@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "short_name": "Codexplain",
-  "name": "Codexplain Extension",
+  "short_name": "Uncoder",
+  "name": "Uncoder Extension",
   "action": {
     "default_popup": "popup.html"
   },

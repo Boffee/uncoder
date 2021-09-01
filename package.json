@@ -1,14 +1,14 @@
 {
   "private": true,
-  "name": "codexplain",
+  "name": "uncoder",
   "workspaces": [
     "packages/*",
     "apps/*"
   ],
   "scripts": {
-    "web": "yarn workspace @codexplain/web",
-    "extension": "yarn workspace @codexplain/extension",
-    "common": "yarn workspace @codexplain/common"
+    "web": "yarn workspace @uncoder/web",
+    "extension": "yarn workspace @uncoder/extension",
+    "common": "yarn workspace @uncoder/common"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
