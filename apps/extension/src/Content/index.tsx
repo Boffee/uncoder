@@ -14,7 +14,7 @@ function createDivAboveSelection(text: string) {
   const div = document.createElement("div");
   div.className = "codexplain-modal";
   // the bottom of the div should be at window height - top of the selection
-  div.style.bottom = `${window.innerHeight - selectionStartRect.top}px`;
+  div.style.bottom = `${window.innerHeight - selectionStartRect.top + 3}px`;
   div.style.left = `${selectionStartRect.left}px`;
   div.innerText = text;
   document.body.appendChild(div);
