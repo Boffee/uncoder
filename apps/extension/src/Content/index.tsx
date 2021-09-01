@@ -6,22 +6,22 @@ import "./index.css";
 const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 
 /**
- * Overlay a div with the given text directly above current selection
- * The bottom edge should be at the top of the selection
+ * Overlay a div with the text directly above the range
+ * The bottom edge should be at the top of the range
  * @param text text to display
+ * @param range range to display text above
+ * @returns div element
  */
-function createDivAboveSelection(text: string) {
-  const selectionStartRect = getSelectionStartRect();
-  if (!selectionStartRect) return;
-
+function createDivAboveRange(text: string, range: Range) {
+  const rangeStartRect = getRangeStartRect(range);
   const div = document.createElement("div");
   div.className = "codexplain-modal";
   // set the bottom of the div to the top of the selection
   const clientHeight = document.documentElement.clientHeight;
   div.style.bottom = `${
-    clientHeight - window.scrollY - selectionStartRect.top + 3
+    clientHeight - window.scrollY - rangeStartRect.top + 3
   }px`;
-  div.style.left = `${selectionStartRect.left}px`;
+  div.style.left = `${rangeStartRect.left}px`;
   div.innerText = text;
   document.body.appendChild(div);
 
@@ -48,12 +48,14 @@ function createDivAboveSelection(text: string) {
  * Explain the current selection block on github
  */
 async function explain() {
+  const range = getExtendedSelectionRange();
+  if (!range) return;
   const sourceCode = getGithubSourceCode();
   if (!sourceCode) return;
-  const selectionBlock = getGithubSelectionText();
+  const selectionBlock = getGithubRangeText(range);
   if (!selectionBlock) return;
   const explanation = await queryCodex(sourceCode, selectionBlock);
-  createDivAboveSelection(explanation);
+  createDivAboveRange(explanation, range);
 }
 
 /**
@@ -69,22 +71,6 @@ function getGithubSourceCode() {
     (row) => row.textContent?.replace(/\n+/g, "")
   );
   return lines.join("\n");
-}
-
-/**
- * Get github code text in extended selection range
- * @return text in extended selection range
- */
-function getGithubSelectionText() {
-  const selection = window.getSelection();
-  if (!selection) return;
-  const range = selection.getRangeAt(0);
-  if (!range) return;
-
-  const extendedRange = extendRange(range);
-  const text = getGithubRangeText(extendedRange);
-  console.log(text);
-  return text;
 }
 
 /**
@@ -153,18 +139,25 @@ function getSourceCodeWindow(
 }
 
 /**
- * Get the bounding rect of the selection start
- * @returns rect of the selection start
+ * Get the bounding rect of the range start
+ * @param range range to get bounding rect of
+ * @returns rect of the range start
  */
-function getSelectionStartRect() {
-  const selection = window.getSelection();
-  if (!selection) return;
-  const range = selection.getRangeAt(0);
-  const extendedRange = extendRange(range);
-  const trimmedRange = trimRange(extendedRange);
+function getRangeStartRect(range: Range) {
+  const trimmedRange = trimRange(range);
   // get range of the startContainer only
   trimmedRange.setEnd(trimmedRange.startContainer, trimmedRange.startOffset);
   return trimmedRange.getBoundingClientRect();
+}
+
+/**
+ * Get the extended range of the current selection
+ * @returns extended range
+ */
+function getExtendedSelectionRange() {
+  const range = window.getSelection()?.getRangeAt(0);
+  if (!range) return;
+  return extendRange(range);
 }
 
 /**
