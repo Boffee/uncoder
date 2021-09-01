@@ -20,7 +20,7 @@
   },
   "scripts": {
     "dev": "NODE_ENV=development webpack --mode development --config webpack.config.js --watch",
-    "build": "webpack -p --mode production"
+    "build": "webpack --mode production"
   },
   "eslintConfig": {
     "extends": [
