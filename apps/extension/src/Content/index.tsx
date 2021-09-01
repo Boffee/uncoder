@@ -12,16 +12,14 @@ const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
  * @param range range to display text above
  * @returns div element
  */
-function createDivAboveRange(text: string, range: Range) {
-  const rangeStartRect = getRangeStartRect(range);
+function createDivAboveRect(text: string, rect: DOMRect) {
   const div = document.createElement("div");
   div.className = "codexplain-modal";
   // set the bottom of the div to the top of the selection
-  const clientHeight = document.documentElement.clientHeight;
   div.style.bottom = `${
-    clientHeight - window.scrollY - rangeStartRect.top + 3
+    document.documentElement.clientHeight - window.scrollY - rect.top + 3
   }px`;
-  div.style.left = `${rangeStartRect.left}px`;
+  div.style.left = `${rect.left}px`;
   div.innerText = text;
   document.body.appendChild(div);
 
@@ -48,14 +46,15 @@ function createDivAboveRange(text: string, range: Range) {
 /**
  * Explain the current selection block on github
  */
-async function explain() {
+async function explainGithub() {
   const range = getExtendedSelectionRange();
   if (!range) return;
   const sourceCode = getGithubSourceCode();
   if (!sourceCode) return;
   const selectionBlock = getGithubRangeText(range);
   if (!selectionBlock) return;
-  const div = createDivAboveRange("Loading...", range);
+  const rect = getRangeStartRect(range);
+  const div = createDivAboveRect("Loading...", rect);
   if (!div) return;
   const explanation = await queryCodex(sourceCode, selectionBlock);
   div.innerText = explanation;
@@ -292,7 +291,7 @@ function findFirstWordEnd(text: string) {
 // run explain on "explain" message from background script
 browser.runtime.onMessage.addListener(async (request, sender) => {
   if (request.type === "explain") {
-    explain();
+    explainGithub();
   }
 });
 
@@ -306,6 +305,6 @@ document.addEventListener("keydown", (event) => {
     event.key == "e" &&
     !event.shiftKey
   ) {
-    explain();
+    explainGithub();
   }
 });
