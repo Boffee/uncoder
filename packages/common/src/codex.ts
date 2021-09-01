@@ -1,4 +1,4 @@
-import OpenAI from "openai-api";
+import OpenAI, { Completion } from "openai-api";
 
 export const TEMPLATE = `
 \`\`\`{{LANGUAGE}}
@@ -42,7 +42,7 @@ export async function queryCodex({
   prompt,
   apiKey,
   stop = ["##"],
-}: QueryCodexParams) {
+}: QueryCodexParams): Promise<Completion> {
   const openai = new OpenAI(apiKey);
   const gptResponse = await openai.complete({
     engine: "davinci-codex",
@@ -90,6 +90,7 @@ export type QueryCodexWithTemplateParams = {
   instruction?: InstructionNames;
   language?: string;
   block?: string;
+  stop?: string[];
   apiKey: string;
 };
 // Query OpenAI with template and give prompt
@@ -98,10 +99,10 @@ export async function queryCodexWithTemplate({
   instruction,
   language,
   block,
+  stop,
   apiKey,
-}: QueryCodexWithTemplateParams): Promise<string> {
+}: QueryCodexWithTemplateParams): Promise<Completion> {
   const prompt = generatePrompt({ input, instruction, language, block });
-  const stop = block ? ["##", "```"] : ["##"];
-  const response = await queryCodex({ prompt, apiKey, stop: stop });
-  return response.data.choices[0].text;
+  const response = await queryCodex({ prompt, apiKey, stop });
+  return response;
 }
