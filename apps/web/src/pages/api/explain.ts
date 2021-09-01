@@ -55,6 +55,12 @@ export default async function handler(
     const output = response.data.choices[0].text;
     res.status(200).json({ output });
   } catch (e) {
-    res.status(500).json({ message: e.message });
+    if (e instanceof Error) {
+      res.status(500).json({ message: e.message });
+    } else if (typeof e === "string") {
+      res.status(500).json({ message: e });
+    } else {
+      res.status(500).json({ message: "Unknown error" });
+    }
   }
 }
