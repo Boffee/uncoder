@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const { argv } = require("process");
 
 const fileExtensions = [
   "jpg",
@@ -19,10 +20,10 @@ const fileExtensions = [
   "woff2",
 ];
 
-const isDev = process.env.NODE_ENV == "development";
+const isDev = argv.mode == "development";
 
 module.exports = {
-  mode: process.env.NODE_ENV || "development",
+  mode: argv.mode,
   devtool: isDev ? "cheap-module-source-map" : undefined,
   optimization: isDev
     ? undefined
@@ -104,7 +105,6 @@ module.exports = {
       verbose: true,
       cleanStaleWebpackAssets: true,
     }),
-    new webpack.EnvironmentPlugin(["NODE_ENV"]),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "Popup", "index.html"),
       filename: "popup.html",

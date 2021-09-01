@@ -19,7 +19,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "dev": "NODE_ENV=development webpack --mode development --config webpack.config.js --watch",
+    "dev": "webpack --mode development --config webpack.config.js --watch",
     "build": "webpack --mode production"
   },
   "eslintConfig": {
