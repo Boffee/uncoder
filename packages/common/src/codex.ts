@@ -51,7 +51,7 @@ export async function queryCodex({
     temperature: 0,
     topP: 1,
     presencePenalty: 0,
-    frequencyPenalty: 0.2,
+    frequencyPenalty: 0.3,
     bestOf: 1,
     n: 1,
     stream: false,
