@@ -110,7 +110,16 @@ async function queryCodex(sourceCode: string, block: string) {
     query: { prompt, isBlock: true },
   });
   console.log(response);
-  return response.output.trim();
+  return joinMultiline(response.output.trim());
+}
+
+/**
+ * Join multiline string in text into a single string
+ * @param text text to join
+ * @returns joined string
+ */
+function joinMultiline(text: string) {
+  return text.split(/(?<=\w)\n(?=\w)/g).join(" ");
 }
 
 /**
