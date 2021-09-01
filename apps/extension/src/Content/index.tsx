@@ -2,6 +2,9 @@ import { generatePrompt } from "@codexplain/common";
 import browser from "webextension-polyfill";
 import "./index.css";
 
+// get current operating system
+const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+
 /**
  * Overlay a div with the given text directly above current selection
  * The bottom edge should be at the top of the selection
@@ -300,6 +303,20 @@ function findFirstWordEnd(text: string) {
 // run explain on "explain" message from background script
 browser.runtime.onMessage.addListener(async (request, sender) => {
   if (request.type === "explain") {
+    explain();
+  }
+});
+
+// run explain on on cmd+e on mac and ctrl+e on windows
+document.addEventListener("keydown", (event) => {
+  // ignore hold down
+  if (event.repeat) return;
+  // ignore if not cmd+e
+  if (
+    ((event.ctrlKey && !isMac) || (event.metaKey && isMac)) &&
+    event.key == "e" &&
+    !event.shiftKey
+  ) {
     explain();
   }
 });
