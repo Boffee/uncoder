@@ -1,6 +1,6 @@
 import { generatePrompt } from "@codexplain/common";
 import browser from "webextension-polyfill";
-import "./index.css";
+import "./index.scss";
 
 // get current operating system
 const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
