@@ -1,6 +1,6 @@
 /* github dark theme */
 .codexplain-modal {
-  position: fixed;
+  position: absolute;
   background-color: #161b22;
   color: #c9d1d9;
   border: 1px solid #30363d;

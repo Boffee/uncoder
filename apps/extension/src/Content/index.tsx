@@ -16,37 +16,30 @@ function createDivAboveSelection(text: string) {
 
   const div = document.createElement("div");
   div.className = "codexplain-modal";
-  // the bottom of the div should be at window height - top of the selection
-  div.style.bottom = `${window.innerHeight - selectionStartRect.top + 3}px`;
+  // set the bottom of the div to the top of the selection
+  const clientHeight = document.documentElement.clientHeight;
+  div.style.bottom = `${
+    clientHeight - window.scrollY - selectionStartRect.top + 3
+  }px`;
   div.style.left = `${selectionStartRect.left}px`;
   div.innerText = text;
   document.body.appendChild(div);
 
-  // remove the overlay on scroll, click, or escape
-  const scrollHandler = () => {
-    document.body.removeChild(div);
-    window.removeEventListener("scroll", scrollHandler);
-    window.removeEventListener("click", clickHandler);
-    window.removeEventListener("keydown", keydownHandler);
-  };
   const clickHandler = (event: MouseEvent) => {
     // only remove the overlay if the click is outside the overlay
     if (div.contains(event.target as Node)) return;
     document.body.removeChild(div);
-    window.removeEventListener("scroll", scrollHandler);
     window.removeEventListener("click", clickHandler);
     window.removeEventListener("keydown", keydownHandler);
   };
   const keydownHandler = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
       document.body.removeChild(div);
-      window.removeEventListener("scroll", scrollHandler);
       window.removeEventListener("click", clickHandler);
       window.removeEventListener("keydown", keydownHandler);
     }
   };
 
-  window.addEventListener("scroll", scrollHandler);
   window.addEventListener("click", clickHandler);
   window.addEventListener("keydown", keydownHandler);
 }
